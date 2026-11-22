@@ -2,21 +2,21 @@ from pathlib import Path
 from datetime import datetime
 import zipfile
 
-# Get the project directory
-ROOT = Path(__file__).resolve().parent
+# Project directory
+project_dir = Path(".")
 
-# Create backup folder
-BACKUP_DIR = ROOT / "backups"
-BACKUP_DIR.mkdir(exist_ok=True)
+# Backup directory
+backup_dir = Path("backups")
+backup_dir.mkdir(exist_ok=True)
 
-# Generate date and time
+# Generate timestamp
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-# ZIP backup file
-backup_file = BACKUP_DIR / f"backup_{timestamp}.zip"
+# Backup filename
+backup_file = backup_dir / f"backup_{timestamp}.zip"
 
-# Folders to exclude
-excluded = {
+# Excluded folders
+exclude = {
     ".git",
     "backups",
     "__pycache__",
@@ -24,27 +24,18 @@ excluded = {
     "venv"
 }
 
-# Create backup
+# Create ZIP backup
 with zipfile.ZipFile(
-    backup_file,
-    "w",
-    zipfile.ZIP_DEFLATED
-) as zip_file:
+    backup_file, "w", zipfile.ZIP_DEFLATED
+) as zipf:
 
-    for file in ROOT.rglob("*"):
+    for file in project_dir.rglob("*"):
+        if file.is_file():
+            if not any(part in exclude for part in file.parts):
+                zipf.write(
+                    file,
+                    file.relative_to(project_dir)
+                )
 
-        if not file.is_file():
-            continue
-
-        relative_path = file.relative_to(ROOT)
-
-        # Skip excluded folders
-        if any(part in excluded for part in relative_path.parts):
-            continue
-
-        zip_file.write(file, relative_path)
-
-print("================================")
-print(" BACKUP CREATED SUCCESSFULLY!")
-print("================================")
-print("Backup location:", backup_file)
+print("BACKUP CREATED SUCCESSFULLY!")
+print(f"Backup location: {backup_file}")
