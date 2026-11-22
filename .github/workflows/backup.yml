@@ -1,27 +1,29 @@
-name: Automated Repository Backup
+name: Automated Backup System
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '30 0 * * *'
 
 jobs:
   backup:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: '3.x'
 
-      - name: Run backup script
+      - name: Run Backup Script
         run: python backup.py
 
-      - name: Upload backup
+      - name: Upload Backup Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: repository-backup
+          name: automated-backup
           path: backups/*.zip
           retention-days: 7
