@@ -1,0 +1,27 @@
+name: Automated Repository Backup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run backup script
+        run: python backup.py
+
+      - name: Upload backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-backup
+          path: backups/*.zip
+          retention-days: 7
