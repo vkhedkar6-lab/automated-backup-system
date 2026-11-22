@@ -1,3 +1,4 @@
+![GitHub Actions Status](https://github.com/vkhedkar6-lab/automated-backup-system/actions/workflows/backup.yml/badge.svg)
 # Automated Backup System Using Python and GitHub Actions
 
 ## About the Project
