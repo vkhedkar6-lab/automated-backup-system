@@ -17,6 +17,7 @@ The Automated Backup System automates the process of creating ZIP backups using 
 - ZIP file compression
 - GitHub Actions workflow automation
 - Version control using GitHub
+- Error handling for backup failures
 
 ## How It Works
 1. Python scans the project directory.
